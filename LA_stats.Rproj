@@ -1,0 +1,16 @@
+Version: 1.0
+ProjectId: edce8f3c-de9a-4e8e-8e95-f7d89c95462a
+
+RestoreWorkspace: Default
+SaveWorkspace: Default
+AlwaysSaveHistory: Default
+
+EnableCodeIndexing: Yes
+UseSpacesForTab: Yes
+NumSpacesForTab: 2
+Encoding: UTF-8
+
+RnwWeave: Sweave
+LaTeX: pdfLaTeX
+
+ProjectName: AGORA
