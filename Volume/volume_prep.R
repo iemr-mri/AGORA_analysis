@@ -63,6 +63,7 @@ method_frame <- method_frame %>%
 
 observer_simpson <- merge(simpson_HE, simpson_Hae, by = 'ID', suffixes = c("_HE", "_Hae"))
 observer_simpson <- observer_simpson %>%
-  select(ID, Gender, Max_V, Min_V, SV)
+  mutate(Gender = Gender_HE) %>%
+  select(-Gender_Hae)
 
 save.image(file = "volume_data.RData")
