@@ -20,7 +20,7 @@ simpson_HE <- data.frame(
   Min_V = LA_simpson_HE$`Min volume [ml]`,
   SV = LA_simpson_HE$`SV [ml]`,
   Method = "Simpson",
-  Scan_nr = LA_simpson_HE$`Scan nr`
+  Age = LA_simpson_HE$`Age [months]`
 )
 simpson_HE <- na.omit(simpson_HE)
 simpson_HE$Gender <- factor(simpson_HE$Gender, 
@@ -35,7 +35,7 @@ simpson_Hae <- data.frame(
   Min_V = LA_simpson_Hae$`Min Simpson's method [ml]`,
   SV = LA_simpson_Hae$`SV [ml]`,
   Method = "Simpson",
-  Scan_nr = LA_simpson_Hae$`Scan nr`
+  Age = LA_simpson_Hae$`Age [months]`
 )
 simpson_Hae <- na.omit(simpson_Hae)
 simpson_Hae$Gender <- factor(simpson_Hae$Gender, 
@@ -49,7 +49,7 @@ biplane_HE <- data.frame(
   Min_V = LA_biplane_HE$`Min LA volume [mL] (avg L)`,
   SV = LA_biplane_HE$`Volume difference`,
   Method = "Biplane",
-  Scan_nr = LA_biplane_HE$`Scan nr`
+  Age = LA_simpson_HE$`Age [months]`
 )
 biplane_HE <- na.omit(biplane_HE)
 biplane_HE$Gender <- factor(biplane_HE$Gender, 
@@ -70,3 +70,4 @@ observer_simpson <- observer_simpson %>%
   select(-Gender_Hae)
 
 save.image(file = "Volume/volume_data.RData")
+
