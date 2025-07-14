@@ -13,7 +13,8 @@ simpson_frame <- data.frame(
   ID = LA_simpson$`Animal ID`,
   Gender = LA_simpson$Gender,
   EF = LA_simpson$EF,
-  Method = "Simpson"
+  Method = "Simpson",
+  Age = LA_simpson$`Age [months]`
 )
 simpson_frame <- na.omit(simpson_frame)
 simpson_frame$Gender <- factor(simpson_frame$Gender, 
@@ -24,7 +25,8 @@ biplane_frame <- data.frame(
   ID = LA_biplane$`Animal ID`,
   Gender = LA_biplane$Gender,
   EF = LA_biplane$EF,
-  Method = "Biplane"
+  Method = "Biplane",
+  Age = LA_biplane$`Age [months]`
 )
 biplane_frame <- na.omit(biplane_frame)
 biplane_frame$Gender <- factor(biplane_frame$Gender, 
@@ -38,6 +40,6 @@ group_frame <- group_frame %>%
 
 corr_frame <- merge(simpson_frame, biplane_frame, by = 'ID', suffixes = c("_simpson", "_biplane"))
 corr_frame <- corr_frame %>%
-  select(ID, Gender = Gender_biplane, EF_simpson, EF_biplane)
+  select(ID, Gender = Gender_simpson, EF_simpson, EF_biplane, Age = Age_simpson)
 
 save.image(file = "EF_data.RData")

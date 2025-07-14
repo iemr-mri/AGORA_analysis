@@ -1,6 +1,5 @@
 # Load packages
 library(readxl)
-library(ggplot2)
 library(tidyr)
 library(dplyr)
 library(ggpubr)

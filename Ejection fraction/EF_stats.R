@@ -1,79 +1,43 @@
 # RUN DATA PREPARATION
-source("EF_data.r")
+source("Ejection fraction/EF_prep.r")
 # or load saved data
-load("EF_data.RData")
+load("Ejection fraction/EF_data.RData")
 
 # ACTIVATE PACKAGES
 library(ggplot2)
+library(ggpubr)
 
 ## EF BOX PLOTS ----
-# EF box - Simpson's
-simpson_frame %>%
-  ggplot(aes(x = Gender, y = EF, fill = Gender)) +
-    geom_boxplot(width = 0.5) +
-    labs(title = "Ejection fraction - Simpson's method",
-         x = "Gender",
-         y = "EF (%)") +
-    theme_bw() +
-    theme(plot.title = element_text(hjust = 0.5)) +
-    scale_fill_manual(values=c("tomato", "steelblue"))
 
-# EF box - Biplane
-biplane_frame %>%
-  ggplot(aes(x = Gender, y = EF, fill = Gender)) +
-    geom_boxplot(width = 0.5) +
-    labs(title = "Ejection fraction - Biplane method",
-         x = "Gender",
-         y = "EF (%)") +
-    theme_bw() +
-    theme(plot.title = element_text(hjust = 0.5)) +
-    scale_fill_manual(values=c("tomato", "steelblue"))
+# Ejection fraction (9 months old) - Simpson's method
+ggboxplot(simpson_frame %>% filter(Age == 9), x = "Gender", y = "EF", fill = "Gender",
+          xlab = "Gender", ylab = "EF (%)") + 
+          theme(legend.position = "none")
 
-# EF box - both methods
-group_frame %>%
-  ggplot(aes(x = Method, y = EF, fill = Group)) +
-    geom_boxplot(width = 0.75) +
-    labs(title = "Ejection fraction by gender and method",
-         y = "EF (%)",
-         x = "Group") +
-    theme_bw() +
-    theme(plot.title = element_text(hjust = 0.5),
-          axis.ticks.x = element_blank()) +
-    scale_fill_manual(values = c("tomato", "steelblue","lightpink","lightblue"))
+# Ejection fraction (9 to 16 months old) - Simpson's method
+ggboxplot(simpson_frame, x = "Age", y = "EF", fill = "Gender",
+          xlab = "Age (months)", ylab = "EF (%)")
+
+# Ejection fraction (9 months old) - Biplane method
+ggboxplot(biplane_frame %>% filter(Age == 9), x = "Gender", y = "EF", fill = "Gender",
+          xlab = "Gender", ylab = "EF (%)") + 
+          theme(legend.position = "none")
+
+# Ejection fraction (9 months old) - both methods
+ggboxplot(group_frame %>% filter(Age == 9), x = "Method", y = "EF", fill = "Gender",
+          xlab = "", ylab = "EF (%)")
 
 
 ## CORRELATION ----
-# FEMALES
-RegFem <- lm(`Biplane Method` ~ `Simpson's Method`, data = corr_frame %>% filter(Gender == "F"))
+# Correlation between ejection fraction with two methods for female, 9 month old animals
+ggscatter(corr_frame %>% filter(Gender == "Female", Age == 9), x = "EF_simpson", y = "EF_biplane",
+          xlab = "EF (%) - Simpson's", ylab = "EF (%) - Biplane",
+          add = "reg.line", conf.int = TRUE)
 
-corr_frame %>%
-  filter(Gender == "Female") %>%
-  ggplot(aes(EF_simpson, EF_biplane)) +
-    geom_point(alpha = 0.7) +
-    geom_smooth(method = "lm", se = TRUE, color = "black", fill="lightpink") +
-    labs(x = "EF (%) - Simpson's", 
-         y = "EF (%) - Biplane", 
-         title = "Correlation between Ejection Fractions (Simpson's vs. Biplane) for Females") +
-    theme_bw() +
-    theme(plot.title = element_text(hjust = 0.5)) +
-    guides(color = "none") +
-    scale_color_manual(values = c("tomato"))
-
-# MALES
-RegMa <- lm(`Biplane Method` ~ `Simpson's Method`, data = corr_frame %>% filter(Gender == "M"))
-
-corr_frame %>% 
-  filter(Gender == "Male") %>%
-  ggplot(aes(EF_simpson, EF_biplane)) +
-    geom_point(alpha = 0.7) +
-    geom_smooth(method = "lm", se = TRUE, color = "black", fill="lightblue") +
-    labs(x = "EF (%) - Simpson's",
-         y = "EF (%) - Biplane",
-         title = "Correlation between Ejection Fractions (Simpson's vs. Biplane) for Males") +
-    theme_bw() +
-    theme(plot.title = element_text(hjust = 0.5)) +
-    guides(color = "none") +
-    scale_color_manual(values = c("steelblue"))
+# Correlation between ejection fraction with two methods for male, 9 month old animals
+ggscatter(corr_frame %>% filter(Gender == "Male", Age == 9), x = "EF_simpson", y = "EF_biplane",
+          xlab = "EF (%) - Simpson's", ylab = "EF (%) - Biplane",
+          add = "reg.line", conf.int = TRUE)
 
 
 ## SUMMARY ----
@@ -84,34 +48,5 @@ summary(subset(simpson_frame))
 summary(subset(biplane_frame, Gender == "F"))
 summary(subset(biplane_frame, Gender == "M"))
 summary(subset(biplane_frame))
-
-
-## EF paired t-test (old module) ----
-# FEMALES
-ggplot(long_EF[long_EF$Gender == "F", ], aes(x = Method, y = EF)) +
-  geom_boxplot(aes(fill = Method), position = position_dodge(width = 0.75), alpha = 0.5) +
-  geom_jitter(aes(color = Gender), position = position_jitterdodge(jitter.width = 0, dodge.width = 0), size = 2) +
-  geom_line(aes(group = ID, color = Gender), position = position_dodge(width = 0), alpha = 0.5) +
-  labs(x = "Method", 
-       y = "EF (%)", 
-       title = "Ejection fraction paired by method for females") +
-  theme_bw() +
-  theme(plot.title = element_text(hjust = 0.5)) +
-  guides(color = "none") +
-  scale_color_manual(values = c("tomato3")) +
-  scale_fill_manual(values = c("lightpink", "tomato"))
-
-# MALES
-ggplot(long_EF[long_EF$Gender == "M", ], aes(x = Method, y = EF)) +
-  geom_boxplot(aes(fill = Method), position = position_dodge(width = 0.75), alpha = 0.5) +
-  geom_jitter(aes(color = Gender), position = position_jitterdodge(jitter.width = 0, dodge.width = 0), size = 2) +
-  geom_line(aes(group = ID, color = Gender), position = position_dodge(width = 0), alpha = 0.5) +
-  labs(x = "Method", y = "EF (%)", title = "Ejection Fraction paired by method for males") +
-  theme_bw() +
-  theme(plot.title = element_text(hjust = 0.5)) +
-  guides(color = "none") +
-  scale_color_manual(values = c("navy")) +
-  scale_fill_manual(values = c("lightblue", "steelblue"))
-
 
 
