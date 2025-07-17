@@ -14,13 +14,13 @@ LA_simpson_Hae <- read_excel("R:\\Projects\\AGORA\\LA measurements\\LA size meas
 ## Create data frames for each group, method and observer ----
 # Simpson - HE
 simpson_HE <- data.frame(
-  ID = LA_simpson_HE$`Animal ID`,
-  Gender = LA_simpson_HE$Gender,
-  Max_V = LA_simpson_HE$`Max volume [ml]`,
-  Min_V = LA_simpson_HE$`Min volume [ml]`,
-  SV = LA_simpson_HE$`SV [ml]`,
-  Method = "Simpson",
-  Age = LA_simpson_HE$`Age [months]`
+  ID       = LA_simpson_HE$`Animal ID`,
+  Gender   = LA_simpson_HE$Gender,
+  Max_V    = LA_simpson_HE$`Max volume [ml]`,
+  Min_V    = LA_simpson_HE$`Min volume [ml]`,
+  SV       = LA_simpson_HE$`SV [ml]`,
+  Method   = "Simpson",
+  Age      = LA_simpson_HE$`Age [months]`
 )
 simpson_HE <- na.omit(simpson_HE)
 simpson_HE$Gender <- factor(simpson_HE$Gender, 
@@ -29,13 +29,13 @@ simpson_HE$Gender <- factor(simpson_HE$Gender,
 
 # Simpson - Hae
 simpson_Hae <- data.frame(
-  ID = LA_simpson_Hae$`Animal ID`,
-  Gender = LA_simpson_Hae$Gender,
-  Max_V = LA_simpson_Hae$`Max Simpson's method [ml]`,
-  Min_V = LA_simpson_Hae$`Min Simpson's method [ml]`,
-  SV = LA_simpson_Hae$`SV [ml]`,
-  Method = "Simpson",
-  Age = LA_simpson_Hae$`Age [months]`
+  ID      = LA_simpson_Hae$`Animal ID`,
+  Gender  = LA_simpson_Hae$Gender,
+  Max_V   = LA_simpson_Hae$`Max Simpson's method [ml]`,
+  Min_V   = LA_simpson_Hae$`Min Simpson's method [ml]`,
+  SV      = LA_simpson_Hae$`SV [ml]`,
+  Method  = "Simpson",
+  Age     = LA_simpson_Hae$`Age [months]`
 )
 simpson_Hae <- na.omit(simpson_Hae)
 simpson_Hae$Gender <- factor(simpson_Hae$Gender, 
@@ -43,13 +43,13 @@ simpson_Hae$Gender <- factor(simpson_Hae$Gender,
                             labels = c("Female", "Male"))
 # Biplane - HE
 biplane_HE <- data.frame(
-  ID = LA_biplane_HE$`Animal ID`,
-  Gender = LA_biplane_HE$Gender,
-  Max_V = LA_biplane_HE$`Max LA volume [mL] (avg L)`,
-  Min_V = LA_biplane_HE$`Min LA volume [mL] (avg L)`,
-  SV = LA_biplane_HE$`Volume difference`,
-  Method = "Biplane",
-  Age = LA_simpson_HE$`Age [months]`
+  ID        = LA_biplane_HE$`Animal ID`,
+  Gender    = LA_biplane_HE$Gender,
+  Max_V     = LA_biplane_HE$`Max LA volume [mL] (avg L)`,
+  Min_V     = LA_biplane_HE$`Min LA volume [mL] (avg L)`,
+  SV        = LA_biplane_HE$`Volume difference`,
+  Method    = "Biplane",
+  Age       = LA_biplane_HE$`Age [months]`
 )
 biplane_HE <- na.omit(biplane_HE)
 biplane_HE$Gender <- factor(biplane_HE$Gender, 
