@@ -23,9 +23,15 @@ simpson_HE <- data.frame(
   Age      = LA_simpson_HE$`Age [months]`
 )
 simpson_HE <- na.omit(simpson_HE)
+
+# Convert F/M into Female/Male for aesthetics
 simpson_HE$Gender <- factor(simpson_HE$Gender, 
                                levels = c("F", "M"),
                                labels = c("Female", "Male"))
+
+simpson_HE$Group <- factor(sub("^(AG|MI).*", "\\1", simpson_HE$ID),
+                           levels = c("AG", "MI"),
+                           labels = c("Aging", "MI"))
 
 # Simpson - Hae
 simpson_Hae <- data.frame(
