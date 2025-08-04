@@ -1,24 +1,26 @@
 # Load packages
 library(readxl)
-library(tidyr)
-library(dplyr)
+library(tidyverse)
 library(ggpubr)
 
 MR_data <- read_excel("R:\\Projects\\AGORA\\LA measurements\\LA size measurements_Henrik.xlsx", sheet = "raw_biplane")
-Echo_data <- read_excel("R:\\Projects\\AGORA\\LA measurements\\LA size measurements_Henrik.xlsx", sheet = "raw_echo")
+Echo_data <- read_excel("R:\\Projects\\AGORA\\LA measurements\\LA size_ECHO_Haelin.xlsx", sheet = "max")
 
-MR_frame <- data.frame(
+MR_frame <- tibble(
   ID = MR_data$`Animal ID`,
   L = MR_data$`Max 4CH-Length [mm]`,
-  Gender = MR_data$Gender
+  Gender = MR_data$Gender,
+  Age = MR_data$`Age [months]`
 )
 
-Echo_frame <- data.frame(
+Echo_frame <- tibble(
   ID = Echo_data$`Animal ID`,
-  L = Echo_data$`LAD avg mm`
+  L = Echo_data$`LAD avg mm`,
+  Gender = Echo_data$Gender,
+  Age = Echo_data$Age
 )
 
-LA_dm <- merge(MR_frame, Echo_frame, by = 'ID', suffixes = c("_MR", "_Echo"))
+LA_dm <- inner_join(MR_frame, Echo_frame, by = c("ID", "Age", "Gender"), suffix = c("_MR", "_Echo"))
 
 # LA diameter - MRI vs Echo
 ggscatter(LA_dm, x = "L_MR", y = "L_Echo",

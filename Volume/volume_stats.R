@@ -9,36 +9,6 @@ library(ggpubr)
 
 ## MAX VOLUME ## ----
 
-# Maximum left atrium volume (9 months old) - Simpson/3D method
-ggboxplot(simpson_HE[simpson_HE$Age == 9, ], x= "Gender", y = "Max_V",
-          ylab  = "Maximum left atrium volume (ml)",
-          title = "Maximum left atrium volume (9 months old) - Simpson/3D method",
-          fill  = "Gender") + 
-  theme(legend.position = "none")
-
-# Maximum left atrium volume (16 months old) - Simpson/3D method
-ggboxplot(simpson_HE[simpson_HE$Age == 16, ], x= "Gender", y = "Max_V",
-          ylab  = "Maximum left atrium volume (ml)",
-          title = "Maximum left atrium volume (16 months old) - Simpson/3D method",
-          fill  = "Gender") + 
-  theme(legend.position = "none")
-
-# Maximum left atrium volume in females from 9 to 16 months old - Simpson/3D method
-ggboxplot(simpson_HE[simpson_HE$Gender == "Female", ], x = "Age", y = "Max_V",
-          ylab  = "Maximum left atrium volume (ml)",
-          xlab  = "Age (months)",
-          title = "Maximum left atrium volume in females from 9 to 16 months old - Simpson/3D method",
-          fill  = "Age") + 
-  theme(legend.position = "none")
-
-# Maximum left atrium volume in males from 9 to 16 months old - Simpson/3D method
-ggboxplot(simpson_HE[simpson_HE$Gender == "Male", ], x = "Age", y = "Max_V",
-          ylab  = "Maximum left atrium volume (ml)",
-          xlab  = "Age (months)",
-          title = "Maximum left atrium volume in males from 9 to 16 months old - Simpson/3D method",
-          fill  = "Age") + 
-  theme(legend.position = "none")
-
 # Maximum left atrium volume from 9 to 16 months old - Simpson/3D method
 ggboxplot(simpson_HE, x = "Age", y = "Max_V",
           ylab  = "Maximum left atrium volume (ml)",
@@ -56,36 +26,6 @@ ggboxplot(method_frame[method_frame$Age == 9, ], x = "Method", y = "Max_V",
 
 ## Min VOLUME ## ----
 
-# Minimum left atrium volume (9 months old) - Simpson/3D method
-ggboxplot(simpson_HE[simpson_HE$Age == 9, ], x= "Gender", y = "Min_V",
-          ylab  = "Minimum left atrium volume (ml)",
-          title = "Minimum left atrium volume (9 months old) - Simpson/3D method",
-          fill  = "Gender") + 
-  theme(legend.position = "none")
-
-# Minimum left atrium volume (16 months old) - Simpson/3D method
-ggboxplot(simpson_HE[simpson_HE$Age == 16, ], x= "Gender", y = "Min_V",
-          ylab  = "Minimum left atrium volume (ml)",
-          title = "Minimum left atrium volume (16 months old) - Simpson/3D method",
-          fill  = "Gender") + 
-  theme(legend.position = "none")
-
-# Minimum left atrium volume in females from 9 to 16 months old - Simpson/3D method
-ggboxplot(simpson_HE[simpson_HE$Gender == "Female", ], x = "Age", y = "Min_V",
-          ylab  = "Minimum left atrium volume (ml)",
-          xlab  = "Age (months)",
-          title = "Minimum left atrium volume in females from 9 to 16 months old - Simpson/3D method",
-          fill  = "Age") + 
-  theme(legend.position = "none")
-
-# Minimum left atrium volume in males from 9 to 16 months old - Simpson/3D method
-ggboxplot(simpson_HE[simpson_HE$Gender == "Male", ], x = "Age", y = "Min_V",
-          ylab  = "Minimum left atrium volume (ml)",
-          xlab  = "Age (months)",
-          title = "Minimum left atrium volume in males from 9 to 16 months old - Simpson/3D method",
-          fill  = "Age") + 
-  theme(legend.position = "none")
-
 # Minimum left atrium volume from 9 to 16 months old - Simpson/3D method
 ggboxplot(simpson_HE, x = "Age", y = "Min_V",
           ylab  = "Minimum left atrium volume (ml)",
@@ -94,43 +34,13 @@ ggboxplot(simpson_HE, x = "Age", y = "Min_V",
           fill  = "Gender")
 
 # Minimum left atrium volume (9 months old) - both methods
-ggboxplot(method_frame[method_frame$Age == 9, ], x = "Method", y = "Min_V",
+ggboxplot(method_frame %>% filter(Age == 9), x = "Method", y = "Min_V",
           ylab  ="Minimum left atrium volume (ml)",
           xlab  = "",
           title = "Minimum left atrium volume (9 months old) - both methods",
           fill  = "Gender")
 
 ## STROKE VOLUME ## ----
-
-# LA stroke volume (9 months old) - Simpson/3D method
-ggboxplot(simpson_HE[simpson_HE$Age == 9, ], x= "Gender", y = "SV",
-          ylab  = "Stroke volume (ml)",
-          title = "Left atrium stroke volume (9 months old) - Simpson/3D method",
-          fill  = "Gender") + 
-  theme(legend.position = "none")
-
-# LA stroke volume (16 months old) - Simpson/3D method
-ggboxplot(simpson_HE[simpson_HE$Age == 16, ], x= "Gender", y = "SV",
-          ylab  = "Stroke volume (ml)",
-          title = "Left atrium stroke volume (16 months old) - Simpson/3D method",
-          fill  = "Gender") + 
-  theme(legend.position = "none")
-
-# LA stroke volume in females from 9 to 16 months old - Simpson/3D method
-ggboxplot(simpson_HE[simpson_HE$Gender == "Female", ], x = "Age", y = "SV",
-          ylab  = "Stroke volume (ml)",
-          xlab  = "Age (months)",
-          title = "Left atrium stroke volume in females from 9 to 16 months old - Simpson/3D method",
-          fill  = "Age") + 
-  theme(legend.position = "none")
-
-# LA stroke volume in males from 9 to 16 months old - Simpson/3D method
-ggboxplot(simpson_HE[simpson_HE$Gender == "Male", ], x = "Age", y = "SV",
-          ylab  = "Stroke volume (ml)",
-          xlab  = "Age (months)",
-          title = "LA stroke volume in males from 9 to 16 months old - Simpson/3D method",
-          fill  = "Age") + 
-  theme(legend.position = "none")
 
 # LA stroke volume from 9 to 16 months old - Simpson/3D method
 ggboxplot(simpson_HE, x = "Age", y = "SV",
@@ -145,3 +55,50 @@ ggboxplot(method_frame[method_frame$Age == 9, ], x = "Method", y = "SV",
           xlab  = "",
           title = "Left atrium stroke volume (9 months old) - both methods",
           fill  = "Gender")
+
+## OBSERVER COMPARISON ----
+
+# Maximum left atrium volume boxplot
+ggboxplot(observer_long %>% filter(Age == 9), x = "Operator", y = "Max_V",
+          ylab  = "Maximum left atrium volume (ml)",
+          xlab  = "Observer",
+          title = "Maximum left atrium volume (9 months old) - observer comparison",
+          fill = "Gender")
+
+# Maximum left atrium volume scatterplot
+ggscatter(observer_wide %>% filter(Age == 9), x = "Max_V_HE" , y = "Max_V_Hae",
+          add   = "reg.line", conf.int = TRUE,
+          ylab  = "Maximum left atrium volume (ml) - Observer B",
+          xlab  = "Maximum left atrium volume (ml) - Observer A",
+          title = "Maximum left atrium volume (9 months old) - observer comparison",
+          color = "Gender")
+
+# Minimum left atrium volume boxplot
+ggboxplot(observer_long %>% filter(Age == 9), x = "Operator", y = "Min_V",
+          ylab  = "Minimum left atrium volume (ml)",
+          xlab  = "Observer",
+          title = "Minimum left atrium volume (9 months old) - observer comparison",
+          fill = "Gender")
+
+# Minimum left atrium volume scatterplot
+ggscatter(observer_wide %>% filter(Age == 9), x = "Min_V_HE" , y = "Min_V_Hae",
+          add   = "reg.line", conf.int = TRUE,
+          ylab  = "Minimum left atrium volume (ml) - Observer B",
+          xlab  = "Minimum left atrium volume (ml) - Observer A",
+          title = "Minimum left atrium volume (9 months old) - observer comparison",
+          color = "Gender")
+
+# Left atrium stroke volume boxplot
+ggboxplot(observer_long %>% filter(Age == 9), x = "Operator", y = "SV",
+          ylab  = "Left atrium stroke volume (ml)",
+          xlab  = "Observer",
+          title = "Left atrium stroke volume (9 months old) - observer comparison",
+          fill = "Gender")
+
+# Left atrium stroke volume scatterplot
+ggscatter(observer_wide %>% filter(Age == 9), x = "SV_HE" , y = "SV_Hae",
+          add   = "reg.line", conf.int = TRUE,
+          ylab  = "Left atrium stroke volume (ml) - Observer B",
+          xlab  = "Left atrium stroke volume (ml) - Observer A",
+          title = "Left atrium stroke volume (9 months old) - observer comparison",
+          color = "Gender")
