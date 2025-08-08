@@ -10,6 +10,7 @@ LA_biplane_HE <- read_excel("R:\\Projects\\AGORA\\LA measurements\\LA size measu
 
 #Data - Haelin
 LA_simpson_Hae <- read_excel("R:\\Projects\\AGORA\\LA measurements\\LA size measurements_Haelin.xlsx", sheet = "raw")
+Echo_data <- read_excel("R:\\Projects\\AGORA\\LA measurements\\LA size_ECHO_Haelin.xlsx", sheet = "max")
 
 # Create data frames for each group, method and observer
 ## Simpson - HE ----
@@ -20,11 +21,16 @@ simpson_HE <- tibble(
   Max_V    = LA_simpson_HE$`Max volume [ml]`,
   Min_V    = LA_simpson_HE$`Min volume [ml]`,
   SV       = LA_simpson_HE$`SV [ml]`,
+  EF       = LA_simpson_HE$EF,
   Method   = "Simpson",
   Operator = "A",
-  Age      = LA_simpson_HE$`Age [months]`
+  Age      = LA_simpson_HE$`Age [months]`,
+  MI_week  = LA_simpson_HE$MI_Week
 )
-simpson_HE <- na.omit(simpson_HE)
+
+# Drop rows containing no max volume
+simpson_HE <- simpson_HE %>%
+  drop_na(Max_V)
 
 # Convert F/M into Female/Male for aesthetics
 simpson_HE$Gender <- factor(simpson_HE$Gender, 
@@ -44,11 +50,16 @@ simpson_Hae <- tibble(
   Max_V    = LA_simpson_Hae$`Max Simpson's method [ml]`/1000, # divide by 1000 for correct unit
   Min_V    = LA_simpson_Hae$`Min Simpson's method [ml]`/1000, # divide by 1000 for correct unit
   SV       = LA_simpson_Hae$`SV [ml]`/1000, # divide by 1000 for correct unit
+  EF       = LA_simpson_Hae$EF,
   Method   = "Simpson",
   Operator = "B",
-  Age      = LA_simpson_Hae$`Age [months]`
+  Age      = LA_simpson_Hae$`Age [months]`,
+  MI_week  = LA_simpson_Hae$MI_week
 )
-simpson_Hae <- na.omit(simpson_Hae)
+
+# Drop rows containing no max volume
+simpson_Hae <- simpson_Hae %>%
+  drop_na(Max_V)
 
 # Convert F/M into Female/Male for aesthetics
 simpson_Hae$Gender <- factor(simpson_Hae$Gender, 
@@ -67,15 +78,16 @@ biplane_HE <- tibble(
   Max_V     = LA_biplane_HE$`Max LA volume [mL] (avg L)`,
   Min_V     = LA_biplane_HE$`Min LA volume [mL] (avg L)`,
   SV        = LA_biplane_HE$`Volume difference`,
+  EF        = LA_biplane_HE$EF,
   Method    = "Biplane",
   Operator  = "A",
-  Age       = LA_biplane_HE$`Age [months]`
+  Age       = LA_biplane_HE$`Age [months]`,
+  MI_week   = LA_biplane_HE$MI_week,
+  Max_d     = LA_biplane_HE$`Max 4CH-Length [mm]`,
+  Min_d     = LA_biplane_HE$`Min 4CH-Length [mm]`
 )
 
-# Omit NA and 0 values
-biplane_HE <- na.omit(biplane_HE)
-biplane_HE <- biplane_HE %>%
-  filter(if_all(everything(),~ . != 0))
+# Since we may use this tibble for both volume parameters and diameter parameters the na_drop step is omitted
 
 # Convert F/M into Female/Male for aesthetics
 biplane_HE$Gender <- factor(biplane_HE$Gender, 
@@ -88,14 +100,38 @@ biplane_HE$Group <- factor(sub("^(AG|MI).*", "\\1", biplane_HE$Cohort),
                            labels = c("Aging", "MI"))
 
 
-
 ## COMBINED FRAMES ----
 
+# A tibble to compare data with different methods (Simpson and biplane)
 method_frame <- bind_rows(simpson_HE, biplane_HE)
+# For this tibble we are omitting NA values since we can only compare volume parameters between the methods
+  # Using the EF column to check for NA values since the biplane volumes can be automatically calculated as 0 if diameter has been measured
+method_frame <- method_frame %>%
+  drop_na(EF)
 
+# Wide and long tibbles combining data from two observers
 observer_wide <- inner_join(simpson_HE, simpson_Hae, by = c('ID', "Age", "Gender", "Cohort", "Group", "Method"), suffix = c("_HE", "_Hae"))
 observer_long <- bind_rows(simpson_HE, simpson_Hae)
 
-## SAVE DATA ----
-save.image(file = "Volume/volume_data.RData")
 
+## LA DIAMETER FRAME ----
+Echo_frame <- tibble(
+  ID = Echo_data$`Animal ID`,
+  Max_d = Echo_data$`LAD avg mm`,
+  Gender = Echo_data$Gender,
+  Age = Echo_data$Age,
+  Cohort = Echo_data$Cohort
+)
+
+# Extract the cohort prefix for grouping aging and MI rats
+Echo_frame$Group <- factor(sub("^(AG|MI).*", "\\1", Echo_frame$Cohort),
+                           levels = c("AG", "MI"),
+                           labels = c("Aging", "MI"))
+
+LA_dm <- biplane_HE %>% 
+  inner_join(Echo_frame, by = c('ID', "Age", "Gender", "Cohort", "Group"), suffix = c("_MR", "_Echo"))
+
+
+## SAVE DATA ----
+save(simpson_HE, biplane_HE, method_frame, observer_wide, observer_long, file = "Data handling/LA_data.Rdata")
+save.image()
