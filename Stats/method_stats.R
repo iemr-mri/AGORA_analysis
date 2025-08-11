@@ -1,3 +1,12 @@
+# RUN DATA PREPARATION
+source("Data handling/data_prep.r")
+# or load saved data
+load("Data handling/LA_data.RData")
+
+# ACTIVATE PACKAGES
+library(ggplot2)
+library(ggpubr)
+
 # Ejection fraction (9 months old) - both methods
 ggboxplot(group_frame %>% filter(Age == 9), x = "Method", y = "EF", fill = "Gender",
           xlab = "", ylab = "EF (%)")
