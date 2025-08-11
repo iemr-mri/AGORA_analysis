@@ -87,7 +87,14 @@ biplane_HE <- tibble(
   Min_d     = LA_biplane_HE$`Min 4CH-Length [mm]`
 )
 
-# Since we may use this tibble for both volume parameters and diameter parameters the na_drop step is omitted
+# If diameter is measured, but not area, the volume parameters can be 0 instead of NA. So we need another step before omitting NA values
+biplane_HE <- biplane_HE %>%
+  mutate(across(c('Max_V','Min_V','SV','EF'), ~na_if(.,0)))
+
+# Drop rows containing no max volume
+biplane_HE <- biplane_HE %>%
+  drop_na(Max_V)
+
 
 # Convert F/M into Female/Male for aesthetics
 biplane_HE$Gender <- factor(biplane_HE$Gender, 
@@ -128,10 +135,18 @@ Echo_frame$Group <- factor(sub("^(AG|MI).*", "\\1", Echo_frame$Cohort),
                            levels = c("AG", "MI"),
                            labels = c("Aging", "MI"))
 
-LA_dm <- biplane_HE %>% 
-  inner_join(Echo_frame, by = c('ID', "Age", "Gender", "Cohort", "Group"), suffix = c("_MR", "_Echo"))
+# Convert F/M into Female/Male for aesthetics
+Echo_frame$Gender <- factor(Echo_frame$Gender, 
+                            levels = c("F", "M"),
+                            labels = c("Female", "Male"))
+
+# Remove rows without data
+Echo_frame <- Echo_frame %>%
+  drop_na(Max_d)
+
+LA_dm <-  inner_join(Echo_frame, biplane_HE, by = c('ID', "Age", "Gender", "Cohort", "Group"), suffix = c("_MR", "_Echo"))
 
 
 ## SAVE DATA ----
-save(simpson_HE, biplane_HE, method_frame, observer_wide, observer_long, file = "Data handling/LA_data.Rdata")
+save(simpson_HE, biplane_HE, method_frame, observer_wide, observer_long, LA_dm, file = "Data handling/LA_data.Rdata")
 save.image()

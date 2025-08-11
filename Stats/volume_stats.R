@@ -17,7 +17,7 @@ ggboxplot(simpson_HE, x = "Age", y = "Max_V",
           fill  = "Gender")
 
 # Maximum left atrium volume (9 months old) - both methods
-ggboxplot(method_frame[method_frame$Age == 9, ], x = "Method", y = "Max_V",
+ggboxplot(method_frame %>% filter(Age == 9), x = "Method", y = "Max_V",
           ylab  ="Maximum left atrium volume (ml)",
           xlab  = "",
           title = "Maximum left atrium volume (9 months old) - both methods",
@@ -50,7 +50,7 @@ ggboxplot(simpson_HE, x = "Age", y = "SV",
           fill  = "Gender")
 
 # LA stroke volume (9 months old) - both methods
-ggboxplot(method_frame[method_frame$Age == 9, ], x = "Method", y = "SV",
+ggboxplot(method_frame %>% filter(Age == 9), x = "Method", y = "SV",
           ylab  ="Stroke volume (ml)",
           xlab  = "",
           title = "Left atrium stroke volume (9 months old) - both methods",
