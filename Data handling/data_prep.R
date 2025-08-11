@@ -108,16 +108,14 @@ biplane_HE$Group <- factor(sub("^(AG|MI).*", "\\1", biplane_HE$Cohort),
 
 
 ## COMBINED FRAMES ----
-
+join_list = c('ID', "Age", "Gender", "Cohort", "Group", "MI_week")
 # A tibble to compare data with different methods (Simpson and biplane)
-method_frame <- bind_rows(simpson_HE, biplane_HE)
-# For this tibble we are omitting NA values since we can only compare volume parameters between the methods
-  # Using the EF column to check for NA values since the biplane volumes can be automatically calculated as 0 if diameter has been measured
-method_frame <- method_frame %>%
-  drop_na(EF)
+method_wide <- inner_join(simpson_HE, biplane_HE, by = c(join_list, "Operator"), suffix = c("_simpson", "_biplane"))
+method_long <- bind_rows(simpson_HE, biplane_HE)
+
 
 # Wide and long tibbles combining data from two observers
-observer_wide <- inner_join(simpson_HE, simpson_Hae, by = c('ID', "Age", "Gender", "Cohort", "Group", "Method"), suffix = c("_HE", "_Hae"))
+observer_wide <- inner_join(simpson_HE, simpson_Hae, by = c(join_list, "Method"), suffix = c("_HE", "_Hae"))
 observer_long <- bind_rows(simpson_HE, simpson_Hae)
 
 
@@ -148,5 +146,5 @@ LA_dm <-  inner_join(Echo_frame, biplane_HE, by = c('ID', "Age", "Gender", "Coho
 
 
 ## SAVE DATA ----
-save(simpson_HE, biplane_HE, method_frame, observer_wide, observer_long, LA_dm, file = "Data handling/LA_data.Rdata")
+save(simpson_HE, biplane_HE, method_wide, method_long, observer_wide, observer_long, LA_dm, file = "Data handling/LA_data.Rdata")
 save.image()
