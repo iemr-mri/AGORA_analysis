@@ -50,7 +50,7 @@ simpson_Hae <- tibble(
   Max_V    = LA_simpson_Hae$`Max Simpson's method [ml]`/1000, # divide by 1000 for correct unit
   Min_V    = LA_simpson_Hae$`Min Simpson's method [ml]`/1000, # divide by 1000 for correct unit
   SV       = LA_simpson_Hae$`SV [ml]`/1000, # divide by 1000 for correct unit
-  EF       = LA_simpson_Hae$EF,
+  EF       = LA_simpson_Hae$EF*100, # times by 100 for correct unit
   Method   = "Simpson",
   Operator = "B",
   Age      = LA_simpson_Hae$`Age [months]`,
@@ -91,9 +91,7 @@ biplane_HE <- tibble(
 biplane_HE <- biplane_HE %>%
   mutate(across(c('Max_V','Min_V','SV','EF'), ~na_if(.,0)))
 
-# Drop rows containing no max volume
-biplane_HE <- biplane_HE %>%
-  drop_na(Max_V)
+# We do not drop NA values since some subjects may have diameter and not volume recordings and vice versa
 
 
 # Convert F/M into Female/Male for aesthetics
