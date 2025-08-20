@@ -38,8 +38,10 @@ ggboxplot(simpson_HE %>% filter(Age == 9, Group == 'MI'),
           facet.by = "Gender")
 
 ggboxplot(simpson_HE %>% filter(Age == 9, Group == 'MI'),
-       x = 'MI_week', y = 'EF',
-       xlab = 'MI week number', ylab = 'Ejection fraction [%]')
+       x = 'MI_week', y = 'EF', fill = "lightgreen",
+       xlab = 'MI week number', ylab = 'Ejection fraction [%]') +
+        stat_compare_means(comparisons = list(c("1", "7")), 
+                   method = "t.test")
 
 ggboxplot(biplane_HE %>% filter(Age == 9, Group == 'MI'),
           x = 'MI_week', y = 'Max_d',
