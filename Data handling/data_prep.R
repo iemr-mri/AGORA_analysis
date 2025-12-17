@@ -161,10 +161,10 @@ operator_wide <- bind_rows(simpson_wide, biplane_wide)
 
 ## LA DIAMETER FRAME ----
 Echo_frame <- tibble(
-  ID = Echo_data$`Animal ID`,
-  Max_d = Echo_data$`LAD avg mm`,
+  ID     = Echo_data$`Animal ID`,
+  Max_D  = Echo_data$`LAD avg mm`,
   Gender = Echo_data$Gender,
-  Age = Echo_data$Age,
+  Age    = Echo_data$Age,
   Cohort = Echo_data$Cohort
 )
 
@@ -175,11 +175,13 @@ Echo_frame$Group <- factor(sub("^(AG|MI).*", "\\1", Echo_frame$Cohort),
 
 # Remove rows without data
 Echo_frame <- Echo_frame %>%
-  drop_na(Max_d)
+  drop_na(Max_D)
 
-LA_dm <-  inner_join(Echo_frame, biplane_HE, by = c('ID', "Age", "Gender", "Cohort", "Group"), suffix = c("_MR", "_Echo"))
+LA_dm <-  inner_join(Echo_frame, simpson_HE, by = c('ID', "Age", "Gender", "Cohort", "Group"), suffix = c("_MR", "_Echo"))
 
+## REMOVE UNUSED TIBBLES
+rm(LA_biplane_HE, LA_biplane_Hae, LA_simpson_HE, LA_simpson_Hae, Echo_frame, Echo_data, opA_wide, opB_wide, simpson_wide, biplane_wide)
 
 ## SAVE DATA ----
-save(simpson_HE, biplane_HE, opA_wide, opB_wide, simpson_wide, biplane_wide, master_long, LA_dm, file = "Data handling/LA_data.Rdata")
+save(simpson_HE, biplane_HE, operator_wide, method_wide, LA_dm, file = "Data handling/LA_data.Rdata")
 save.image()
