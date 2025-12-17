@@ -8,8 +8,34 @@ library(ggplot2)
 source("Data handling/data_prep.r")
 # or load saved data
 load("Data handling/LA_data.RData")
+load("Data handling/master_long.RData")
 
-# LA diameter - MRI vs Echo
+## LA diameter (MRI) over time ----
+ggboxplot(master_long %>% filter(Group == "Aging"), 
+          x = "Age", y = "Max_d",
+          add = "jitter", shape = "Gender",
+          xlab = "Age [months]", ylab = "LA diameter [mm]",
+          fill = "Gender")
+
+ggboxplot(master_long %>% filter(Group == "Aging"), 
+          x = "Age", y = "Max_d",
+          xlab = "Age [months]", ylab = "LA diameter [mm]",
+          fill = "Gender")
+
+ggline(master_long %>% filter(Group == "Aging"), 
+       x = "Age", y = "Max_d",
+       add = "mean_se",
+       xlab = "Age [months]", ylab = "Maximum LA diameter [mm]",
+       color = "Gender")
+
+ggbarplot(master_long %>% filter(Group == "Aging"), 
+       x = "Age", y = "Max_d",
+       add = "mean_se",
+       xlab = "Age [months]", ylab = "Maximum LA diameter [mm]",
+       fill = "Gender",
+       position = position_dodge(0.7))
+
+## LA diameter - MRI vs Echo ----
 ggscatter(LA_dm %>% filter(Age == '9', Group == "Aging"), 
           x = "Max_d_MR", y = "Max_d_Echo",
           add = "reg.line", conf.int = TRUE,
@@ -17,15 +43,15 @@ ggscatter(LA_dm %>% filter(Age == '9', Group == "Aging"),
           color = "Gender")
 
 
-# LA diameter (MRI) vs LA size
-ggscatter(LA_dm %>% filter(Age == '9', Group == "Aging"),
-          x = "Max_d_MR", y = "Max_V",
+## LA diameter (MRI) vs LA size ----
+ggscatter(simpson_HE %>% filter(Group == "Aging"),
+          x = "Max_d", y = "Max_V",
           add = "reg.line", conf.int = TRUE,
           xlab = "LA max diameter [mm]", ylab = "LA max volume [ml]",
           color = "Gender"
           )
 
-# LA diameter (Echo) vs LA size
+## LA diameter (Echo) vs LA size ----
 ggscatter(LA_dm %>% filter(Age == '9', Group == "Aging"),
           x = "Max_d_Echo", y = "Max_V",
           add = "reg.line", conf.int = TRUE,
@@ -33,7 +59,7 @@ ggscatter(LA_dm %>% filter(Age == '9', Group == "Aging"),
           color = "Gender"
 )
 
-# Bland-Altman
+## Bland-Altman ----
 dm_BA <- tibble(
   dm_diff = LA_dm$Max_d_MR - LA_dm$Max_d_Echo,
   dm_avg  = rowMeans(LA_dm[, c("Max_d_MR", "Max_d_Echo")])

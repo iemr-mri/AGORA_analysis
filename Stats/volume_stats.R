@@ -38,31 +38,6 @@ ggpaired(simpson_HE %>%
           stat_compare_means(comparisons = list(c("9", "16")), method = "t.test")
 
 
-
-## Min VOLUME ## ----
-
-# Minimum left atrium volume from 9 to 16 months old - Simpson/3D method
-ggboxplot(simpson_HE %>% filter(Group == "Aging"), 
-          x = "Age", y = "Min_V",
-          ylab  = "Minimum left atrium volume (ml)",
-          xlab  = "Age (months)",
-          title = "Minimum left atrium volume from 9 to 16 months old - Simpson/3D method",
-          fill  = "Gender",
-          facet.by = "Gender") +
-  stat_compare_means(comparisons = list(c("9", "16")), method = "t.test")
-
-
-## STROKE VOLUME ## ----
-
-# LA stroke volume from 9 to 16 months old - Simpson/3D method
-ggboxplot(simpson_HE %>% filter(Group == "Aging"), 
-          x = "Age", y = "SV",
-          ylab  = "Stroke volume (ml)",
-          xlab  = "Age (months)",
-          title = "Left atrium stroke volume from 9 to 16 months old - Simpson/3D method",
-          fill  = "Gender")
-
-
 ## EJECTION FRACTION ## ----
 
 # Ejection fraction (9 months old) - Simpson's method

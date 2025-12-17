@@ -11,25 +11,19 @@ library(tidyverse)
 ## BOX PLOT COMPARISONS ## ----
 
 # Ejection fraction (9 months old) - both methods
-ggboxplot(method_long %>% filter(Age == 9, Group == "Aging"), 
+ggboxplot(master_long %>% filter(Age == 9, Group == "Aging"), 
           x = "Method", y = "EF", fill = "Gender",
-          xlab = "", ylab = "EF (%)")
+          title = "Ejection fraction - 9 month old",
+          xlab = "", ylab = "EF (%)", 
+          facet.by = "Operator")
 
-# Maximum left atrium volume (9 months old) - both methods
-ggboxplot(method_long %>% filter(Age == 9, Group == "Aging"), 
+# Maximum left atrium volume (9 months old)
+ggboxplot(master_long %>% filter(Age == 9, Group == "Aging"), 
           x = "Method", y = "Max_V",
           ylab  ="Maximum left atrium volume (ml)",
           xlab  = "",
-          title = "Maximum left atrium volume (9 months old) - both methods",
-          fill  = "Gender")
-
-# Minimum left atrium volume (9 months old) - both methods
-ggboxplot(method_long %>% filter(Age == 9, Group == "Aging"), 
-          x = "Method", y = "Min_V",
-          ylab  ="Minimum left atrium volume (ml)",
-          xlab  = "",
-          title = "Minimum left atrium volume (9 months old) - both methods",
-          fill  = "Gender")
+          title = "Maximum left atrium volume (9 months old)",
+          fill  = "Gender", facet.by = "Operator")
 
 # LA stroke volume (9 months old) - both methods
 ggboxplot(method_long %>% filter(Age == 9, Group == "Aging"), 
@@ -42,16 +36,30 @@ ggboxplot(method_long %>% filter(Age == 9, Group == "Aging"),
 
 ## CORRELATION ----
 # Correlation between ejection fraction with two methods for female, 9 month old animals
-ggscatter(method_wide %>% filter(Gender == "Female", Age == 9, Group == "Aging"), 
+ggscatter(opA_wide %>% 
+            filter(Group == "Aging"), 
           x = "EF_simpson", y = "EF_biplane",
           xlab = "EF (%) - Simpson's", ylab = "EF (%) - Biplane",
-          add = "reg.line", conf.int = TRUE)
+          add = "reg.line", conf.int = TRUE,
+          title = "Ejection fraction - intra-method operator A variability"
+          )
 
-# Correlation between ejection fraction with two methods for male, 9 month old animals
-ggscatter(method_wide %>% filter(Gender == "Male", Age == 9, Group == "Aging"), 
+ggscatter(opA_wide %>% 
+            filter(Group == "Aging"), 
+          x = "Max_V_simpson", y = "Max_V_biplane",
+          xlab = "Maximum left atrium (ml) - Simpson's", ylab = "Maximum left atrium (ml) - Biplane",
+          add = "reg.line", conf.int = TRUE,
+          title = "Maximum left atrium - intra-method operator A variability"
+)
+
+ggscatter(opB_wide %>%
+            filter(Group == "Aging"),
           x = "EF_simpson", y = "EF_biplane",
           xlab = "EF (%) - Simpson's", ylab = "EF (%) - Biplane",
-          add = "reg.line", conf.int = TRUE)
+          add = "reg.line", conf.int = TRUE,
+          title = "Ejection fraction - intra-method operator B variability",
+          facet.by = "Age"
+            )
 
 ## BLAND-ALTMAN ----
 
@@ -78,18 +86,6 @@ ggplot(method_BA, aes(x = MaxV_avg, y = MaxV_diff)) +
   geom_hline(yintercept = MaxV_meanDiff + 1.96*MaxV_sdDiff, linetype = "dashed", color = "red") + 
   geom_hline(yintercept = MaxV_meanDiff - 1.96*MaxV_sdDiff, linetype = "dashed", color = "red") +
   labs(title = "Maximum left atrium volume", x = "Average maximum volume between methods", y = "Difference between methods")
-
-# BA of min volume
-MinV_meanDiff <- mean(method_BA$MinV_diff)
-MinV_sdDiff   <- sd(method_BA$MinV_diff)
-
-ggplot(method_BA, aes(x = MinV_avg, y = MinV_diff)) +
-  geom_point() +
-  geom_hline(yintercept = MinV_meanDiff, color = "steelblue") +
-  geom_hline(yintercept = MinV_meanDiff + 1.96*MinV_sdDiff, linetype = "dashed", color = "red") + 
-  geom_hline(yintercept = MinV_meanDiff - 1.96*MinV_sdDiff, linetype = "dashed", color = "red") +
-  labs(title = "Minimum left atrium volume", x = "Average minimum volume between methods", y = "Difference between methods")
-
 
 # BA of EF
 EF_meanDiff <- mean(method_BA$EF_diff)
