@@ -8,37 +8,65 @@ library(ggplot2)
 library(ggpubr)
 library(tidyverse)
 
-simpson_HE$Age <- factor(simpson_HE$Age)
-
 ## MAX VOLUME ## ----
 
 # Maximum left atrium volume from 9 to 16 months old - Simpson/3D method
-ggboxplot(simpson_HE %>% filter(Group == "Aging"), 
-          x = "Age", y = "Max_V",
-          ylab  = "Maximum left atrium volume (ml)",
-          xlab  = "Age (months)",
-          title = "Maximum left atrium volume from 9 to 16 months old - Simpson/3D method",
-          fill  = "Gender",
-          facet.by = "Gender") +
-  stat_compare_means(comparisons = list(c("9", "16")), method = "t.test")
+ggplot(simpson_HE %>% filter(Group == "Aging"), 
+       aes(group = Age, x = factor(Age), y = Max_V)) +
+  geom_boxplot(aes(fill = Gender)) +
+  xlab("Age (Months)") +
+  ylab("Maximum left atrium volume (mL)") +
+  facet_grid(. ~ Gender) +
+  stat_compare_means(comparisons = list(c("9", "16")), method = "t.test", label = "p.format")
+
+
   
 # Paired maximum left atrium volume 9-16 months old
-ggpaired(simpson_HE %>% 
-           filter(Group == "Aging") %>% 
-           group_by(ID) %>%
-           filter(n() == 2) %>%
-           ungroup(), 
-          x = "Age", y = "Max_V",
-          id = "ID",
-          ylab  = "Maximum left atrium volume (ml)",
-          xlab  = "Age (months)",
-          title = "Paired maximum left atrium volume from 9 to 16 months old - Simpson/3D method",
-          fill  = "Gender",
-          facet.by = "Gender") + 
-          stat_compare_means(comparisons = list(c("9", "16")), method = "t.test")
+ggplot(simpson_HE %>% filter(Group == "Aging")%>% 
+         group_by(ID) %>%
+         filter(n() == 2) %>%
+         ungroup(), 
+       aes(group = Age, x = factor(Age), y = Max_V)) +
+  geom_boxplot(aes(fill = Gender)) +
+  xlab("Age (Months)") +
+  ylab("Maximum left atrium volume (mL)") +
+  facet_grid(. ~ Gender) +
+  stat_compare_means(comparisons = list(c("9", "16")), method = "t.test", paired = TRUE, label = "p.format")
 
+## MIN VOLUME ----
+# Minimum left atrium volume from 9 to 16 months old - Simpson/3D method
+ggplot(simpson_HE %>% filter(Group == "Aging"), 
+       aes(group = Age, x = factor(Age), y = Min_V)) +
+  geom_boxplot(aes(fill = Gender)) +
+  xlab("Age (Months)") +
+  ylab("Minimum left atrium volume (mL)") +
+  facet_grid(. ~ Gender) +
+  stat_compare_means(comparisons = list(c("9", "16")), method = "t.test", label = "p.format")
 
-## EJECTION FRACTION ## ----
+# Paired minimum left atrium volume 9-16 months old
+ggplot(simpson_HE %>% filter(Group == "Aging")%>% 
+         group_by(ID) %>%
+         filter(n() == 2) %>%
+         ungroup(), 
+       aes(group = Age, x = factor(Age), y = Min_V)) +
+  geom_boxplot(aes(fill = Gender)) +
+  xlab("Age (Months)") +
+  ylab("Minimum left atrium volume (mL)") +
+  facet_grid(. ~ Gender) +
+  stat_compare_means(comparisons = list(c("9", "16")), method = "t.test", paired = TRUE, label = "p.format")
+
+## VOLUME CHANGE
+ggplot(simpson_HE %>% filter(Group == "Aging")%>% 
+         group_by(ID) %>%
+         filter(n() == 2) %>%
+         ungroup(), 
+       aes(x = Gender, y = Max_V-Min_V)) +
+  geom_boxplot(aes(fill = Gender)) +
+  xlab("Gender") +
+  ylab("Maximum volume change 9-16 months") +
+  stat_compare_means(comparisons = list(c("Female", "Male")), method = "t.test", label = "p.format")
+
+## EJECTION FRACTION ----
 
 # Ejection fraction (9 months old) - Simpson's method
 ggboxplot(simpson_HE %>% filter(Age == 9, Group == "Aging"), x = "Gender", y = "EF", fill = "Gender",

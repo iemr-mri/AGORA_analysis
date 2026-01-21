@@ -179,9 +179,26 @@ Echo_frame <- Echo_frame %>%
 
 LA_dm <-  inner_join(Echo_frame, simpson_HE, by = c('ID', "Age", "Gender", "Cohort", "Group"), suffix = c("_MR", "_Echo"))
 
-## REMOVE UNUSED TIBBLES
+## REMOVE UNUSED TIBBLES ----
 rm(LA_biplane_HE, LA_biplane_Hae, LA_simpson_HE, LA_simpson_Hae, Echo_frame, Echo_data, opA_wide, opB_wide, simpson_wide, biplane_wide)
 
 ## SAVE DATA ----
 save(simpson_HE, biplane_HE, operator_wide, method_wide, LA_dm, file = "Data handling/LA_data.Rdata")
 save.image()
+
+## POPULATION STATISTICS
+AG9count <- simpson_HE %>%
+  filter(str_detect(Cohort, "^AG-09\\b")) %>%
+  count(Gender)
+
+AG16count <- simpson_HE %>%
+  filter(str_detect(Cohort, "^AG-16\\b"), Age==9) %>%
+  count(Gender)
+
+AG24count <- simpson_HE %>%
+  filter(str_detect(Cohort, "^AG-24\\b"), Age==9) %>%
+  count(Gender)
+
+MI9count <- simpson_HE %>%
+  filter(str_detect(Cohort, "^MI-09\\b")) %>%
+  count(Gender)
