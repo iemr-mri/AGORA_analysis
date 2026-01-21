@@ -12,12 +12,25 @@ library(tidyverse)
 
 # Maximum left atrium volume from 9 to 16 months old - Simpson/3D method
 ggplot(simpson_HE %>% filter(Group == "Aging"), 
-       aes(group = Age, x = factor(Age), y = Max_V)) +
-  geom_boxplot(aes(fill = Gender)) +
+       aes(fill = Gender, x = factor(Age), y = Max_V)) +
+  geom_boxplot() +
   xlab("Age (Months)") +
   ylab("Maximum left atrium volume (mL)") +
-  facet_grid(. ~ Gender) +
-  stat_compare_means(comparisons = list(c("9", "16")), method = "t.test", label = "p.format")
+  theme_grey(base_size = 15) +
+  #facet_grid(. ~ Gender) +
+  stat_compare_means(aes(group = Gender), method = "t.test", label = "p.signif")
+
+# Tibia corrected max volume
+ggplot(simpson_tib %>% filter(Group == "Aging"), 
+       aes(fill = Gender, x = factor(Age), y = Max_V)) +
+  geom_boxplot() +
+  xlab("Age (Months)") +
+  ylab("Maximum left atrium volume / tibia length (mL/mm)") +
+  theme_grey(base_size = 15) +
+  #facet_grid(. ~ Gender) +
+  stat_compare_means(aes(group = Gender), method = "t.test", label = "p.signif")
+
+
 
 
   
@@ -32,6 +45,7 @@ ggplot(simpson_HE %>% filter(Group == "Aging")%>%
   ylab("Maximum left atrium volume (mL)") +
   facet_grid(. ~ Gender) +
   stat_compare_means(comparisons = list(c("9", "16")), method = "t.test", paired = TRUE, label = "p.format")
+
 
 ## MIN VOLUME ----
 # Minimum left atrium volume from 9 to 16 months old - Simpson/3D method

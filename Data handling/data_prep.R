@@ -7,6 +7,7 @@ library(tidyverse)
 # Data - Henrik Elias
 LA_simpson_HE <- read_excel("R:\\Projects\\AGORA\\LA measurements\\LA size measurements_Henrik.xlsx", sheet = "raw")
 LA_biplane_HE <- read_excel("R:\\Projects\\AGORA\\LA measurements\\LA size measurements_Henrik.xlsx", sheet = "raw_biplane")
+tibia_lengths <- read_excel("R:\\Projects\\AGORA\\LA measurements\\LA size measurements_Henrik.xlsx", sheet = "tibia_avg")
 
 #Data - Haelin
 LA_simpson_Hae <- read_excel("R:\\Projects\\AGORA\\LA measurements\\LA size measurements_Haelin.xlsx", sheet = "raw")
@@ -66,6 +67,11 @@ simpson_HE <- simpson_HE %>%
 simpson_HE$Group <- factor(sub("^(AG|MI).*", "\\1", simpson_HE$Cohort),
                            levels = c("AG", "MI"),
                            labels = c("Aging", "MI"))
+
+simpson_tib <- simpson_HE %>%
+  left_join(tibia_lengths, by = c("Age", "Gender")) %>%
+  mutate(across(all_of(c("Max_V", "Min_V", "Max_D", "Min_D")), ~ .x / tib_length)) %>%
+  select(-tib_length)   # remove helper
 
 ## SIMPSON - HAE ----
 simpson_Hae <- tibble(
@@ -183,10 +189,10 @@ LA_dm <-  inner_join(Echo_frame, simpson_HE, by = c('ID', "Age", "Gender", "Coho
 rm(LA_biplane_HE, LA_biplane_Hae, LA_simpson_HE, LA_simpson_Hae, Echo_frame, Echo_data, opA_wide, opB_wide, simpson_wide, biplane_wide)
 
 ## SAVE DATA ----
-save(simpson_HE, biplane_HE, operator_wide, method_wide, LA_dm, file = "Data handling/LA_data.Rdata")
+save(simpson_HE, biplane_HE, operator_wide, method_wide, LA_dm, tibia_lengths, file = "Data handling/LA_data.Rdata")
 save.image()
 
-## POPULATION STATISTICS
+## POPULATION STATISTICS ----
 AG9count <- simpson_HE %>%
   filter(str_detect(Cohort, "^AG-09\\b")) %>%
   count(Gender)
