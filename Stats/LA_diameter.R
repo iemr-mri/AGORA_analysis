@@ -10,54 +10,66 @@ source("Data handling/data_prep.r")
 load("Data handling/LA_data.RData")
 load("Data handling/master_long.RData")
 
-## LA diameter (MRI) over time ----
-ggboxplot(master_long %>% filter(Group == "Aging"), 
-          x = "Age", y = "Max_d",
-          add = "jitter", shape = "Gender",
-          xlab = "Age [months]", ylab = "LA diameter [mm]",
-          fill = "Gender")
+## Max LA diameter (MRI) over time ----
+# Maximum left atrium diameter from 9 to 16 months old
+ggplot(simpson_HE %>% filter(Group == "Aging"), 
+       aes(fill = Gender, x = factor(Age), y = Max_D)) +
+  geom_boxplot() +
+  xlab("Age (Months)") +
+  ylab("Maximum LA diameter (mm)") +
+  theme_grey(base_size = 15) +
+  stat_compare_means(aes(group = Gender), method = "t.test", label = "p.signif")
 
-ggboxplot(master_long %>% filter(Group == "Aging"), 
-          x = "Age", y = "Max_d",
-          xlab = "Age [months]", ylab = "LA diameter [mm]",
-          fill = "Gender")
+# Maximum left atrium diameter from 9 to 16 months old - faceted
+ggplot(simpson_HE %>% filter(Group == "Aging"), 
+       aes(x = factor(Age), y = Max_D)) +
+  geom_boxplot(aes(fill=Gender)) +
+  xlab("Age (Months)") +
+  ylab("Maximum LA diameter (mm)") +
+  theme_grey(base_size = 15) +
+  facet_grid(~ Gender) +
+  stat_compare_means(comparisons = list(c("9","16")), method = "t.test", label = "p.signif")
 
-ggline(master_long %>% filter(Group == "Aging"), 
-       x = "Age", y = "Max_d",
-       add = "mean_se",
-       xlab = "Age [months]", ylab = "Maximum LA diameter [mm]",
-       color = "Gender")
+# Maximum left atrium diameter from 9 to 16 months old (tibia corrected)
+ggplot(simpson_tib %>% filter(Group == "Aging"), 
+       aes(fill = Gender, x = factor(Age), y = Max_D)) +
+  geom_boxplot() +
+  xlab("Age (Months)") +
+  ylab("Maximum LA diameter (mm) / tibia length (mm)") +
+  theme_grey(base_size = 15) +
+  #facet_grid(. ~ Gender) +
+  stat_compare_means(aes(group = Gender), method = "t.test", label = "p.signif")
 
-ggbarplot(master_long %>% filter(Group == "Aging"), 
-       x = "Age", y = "Max_d",
-       add = "mean_se",
-       xlab = "Age [months]", ylab = "Maximum LA diameter [mm]",
-       fill = "Gender",
-       position = position_dodge(0.7))
+## Min LA diameter (MRI) over time ----
+# Minimum left atrium diameter from 9 to 16 months old
+ggplot(simpson_HE %>% filter(Group == "Aging"), 
+       aes(fill = Gender, x = factor(Age), y = Min_D)) +
+  geom_boxplot() +
+  xlab("Age (Months)") +
+  ylab("Minimum LA diameter (mm)") +
+  theme_grey(base_size = 15) +
+  #facet_grid(. ~ Gender) +
+  stat_compare_means(aes(group = Gender), method = "t.test", label = "p.signif")
+
+# Minimum left atrium diameter from 9 to 16 months old (tibia corrected)
+ggplot(simpson_tib %>% filter(Group == "Aging"), 
+       aes(fill = Gender, x = factor(Age), y = Min_D)) +
+  geom_boxplot() +
+  xlab("Age (Months)") +
+  ylab("Minimum LA diameter (mm) / tibia length (mm)") +
+  theme_grey(base_size = 15) +
+  #facet_grid(. ~ Gender) +
+  stat_compare_means(aes(group = Gender), method = "t.test", label = "p.signif")
 
 ## LA diameter - MRI vs Echo ----
-ggscatter(LA_dm %>% filter(Age == '9', Group == "Aging"), 
-          x = "Max_d_MR", y = "Max_d_Echo",
-          add = "reg.line", conf.int = TRUE,
-          xlab = "MRI [mm]", ylab = "Echo [mm]",
-          color = "Gender")
+
 
 
 ## LA diameter (MRI) vs LA size ----
-ggscatter(simpson_HE %>% filter(Group == "Aging"),
-          x = "Max_d", y = "Max_V",
-          add = "reg.line", conf.int = TRUE,
-          xlab = "LA max diameter [mm]", ylab = "LA max volume [ml]",
-          color = "Gender"
-          )
+
 
 ## LA diameter (Echo) vs LA size ----
-ggscatter(LA_dm %>% filter(Age == '9', Group == "Aging"),
-          x = "Max_d_Echo", y = "Max_V",
-          add = "reg.line", conf.int = TRUE,
-          xlab = "LA max diameter - echo [mm]", ylab = "LA max volume [ml]",
-          color = "Gender"
-)
+
 
 ## Bland-Altman ----
 dm_BA <- tibble(

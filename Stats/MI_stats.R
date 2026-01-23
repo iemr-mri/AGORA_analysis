@@ -14,37 +14,35 @@ library(tidyverse)
 ggline(simpson_HE %>% filter(Age == 9, Group == 'MI'),
        x = 'MI_week', y = 'Max_V',
        xlab = 'MI week number', ylab = 'Maximum LA volume [ml]',
-       color = 'Gender', add = "mean_se")
+       color = 'Gender', add = "mean_se") +
+  theme_grey(base_size = 15)
+
+# Line plot of maximum LA volume per week - gender grouped
+ggline(simpson_HE %>% filter(Age == 9, Group == 'MI'),
+       x = 'MI_week', y = 'Max_D',
+       xlab = 'MI week number', ylab = 'Maximum LA diameter [mm]',
+       color = 'Gender', add = "mean_se") +
+  theme_grey(base_size = 15)
 
 # Line plot of LA ejection fraction per week
 ggline(simpson_HE %>% filter(Age == 9, Group == 'MI'),
        x = 'MI_week', y = 'EF',
        xlab = 'MI week number', ylab = 'Ejection fraction [%]',
-       add = c("mean_se"))
+       color = 'Gender',
+       add = c("mean_se")) +
+  theme_grey(base_size = 15)
 
-# line plot of LA diameter per week
-ggline(biplane_HE %>% filter(Age == 9, Group == 'MI'),
-       x = 'MI_week', y = 'Max_d',
-       xlab = 'MI week number', ylab = 'Maximum LA diameter [mm]',
-       color = 'Gender', add = "mean_se")
+## EXTRA MIN SIZE PLOTS ----
+# Line plot of maximum LA volume per week - gender grouped
+ggline(simpson_HE %>% filter(Age == 9, Group == 'MI'),
+       x = 'MI_week', y = 'Min_V',
+       xlab = 'MI week number', ylab = 'Minimum LA volume [ml]',
+       color = 'Gender', add = "mean_se") +
+  theme_grey(base_size = 15)
 
-## COHORT HISTORY box diagrams ----
-
-# Box plot of maximum LA volume per week
-ggboxplot(simpson_HE %>% filter(Age == 9, Group == 'MI'),
-          x = 'MI_week', y = 'Max_V',
-          xlab = 'MI week number', ylab = 'Maximum LA volume [ml]',
-          fill = 'Gender',
-          facet.by = "Gender")
-
-ggboxplot(simpson_HE %>% filter(Age == 9, Group == 'MI'),
-       x = 'MI_week', y = 'EF', fill = "lightgreen",
-       xlab = 'MI week number', ylab = 'Ejection fraction [%]') +
-        stat_compare_means(comparisons = list(c("1", "7")), 
-                   method = "t.test")
-
-ggboxplot(biplane_HE %>% filter(Age == 9, Group == 'MI'),
-          x = 'MI_week', y = 'Max_d',
-          xlab = 'MI week number', ylab = 'Maximum LA diameter [mm]',
-          fill = 'Gender',
-          facet.by = "Gender")
+# Line plot of maximum LA volume per week - gender grouped
+ggline(simpson_HE %>% filter(Age == 9, Group == 'MI'),
+       x = 'MI_week', y = 'Min_D',
+       xlab = 'MI week number', ylab = 'Minimum LA diameter [mm]',
+       color = 'Gender', add = "mean_se") +
+  theme_grey(base_size = 15)

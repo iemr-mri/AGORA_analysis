@@ -10,28 +10,35 @@ library(tidyverse)
 
 ## MAX VOLUME ## ----
 
-# Maximum left atrium volume from 9 to 16 months old - Simpson/3D method
+# Maximum left atrium volume from 9 to 16 months old
 ggplot(simpson_HE %>% filter(Group == "Aging"), 
        aes(fill = Gender, x = factor(Age), y = Max_V)) +
   geom_boxplot() +
   xlab("Age (Months)") +
-  ylab("Maximum left atrium volume (mL)") +
+  ylab("Maximum LA volume (mL)") +
   theme_grey(base_size = 15) +
   #facet_grid(. ~ Gender) +
   stat_compare_means(aes(group = Gender), method = "t.test", label = "p.signif")
+
+# Maximum left atrium volume from 9 to 16 months old - faceted by gender
+ggplot(simpson_HE %>% filter(Group == "Aging"), 
+       aes(x = factor(Age), y = Max_V)) +
+  geom_boxplot(aes(fill=Gender)) +
+  xlab("Age (Months)") +
+  ylab("Maximum LA volume (mL)") +
+  theme_grey(base_size = 15) +
+  facet_grid(~ Gender) +
+  stat_compare_means(comparisons = list(c("9","16")), method = "t.test", label = "p.signif")
 
 # Tibia corrected max volume
 ggplot(simpson_tib %>% filter(Group == "Aging"), 
        aes(fill = Gender, x = factor(Age), y = Max_V)) +
   geom_boxplot() +
   xlab("Age (Months)") +
-  ylab("Maximum left atrium volume / tibia length (mL/mm)") +
+  ylab("Maximum LA volume / tibia length (mL/mm)") +
   theme_grey(base_size = 15) +
   #facet_grid(. ~ Gender) +
   stat_compare_means(aes(group = Gender), method = "t.test", label = "p.signif")
-
-
-
 
   
 # Paired maximum left atrium volume 9-16 months old
@@ -50,12 +57,23 @@ ggplot(simpson_HE %>% filter(Group == "Aging")%>%
 ## MIN VOLUME ----
 # Minimum left atrium volume from 9 to 16 months old - Simpson/3D method
 ggplot(simpson_HE %>% filter(Group == "Aging"), 
-       aes(group = Age, x = factor(Age), y = Min_V)) +
-  geom_boxplot(aes(fill = Gender)) +
+       aes(fill = Gender, x = factor(Age), y = Min_V)) +
+  geom_boxplot() +
   xlab("Age (Months)") +
-  ylab("Minimum left atrium volume (mL)") +
-  facet_grid(. ~ Gender) +
-  stat_compare_means(comparisons = list(c("9", "16")), method = "t.test", label = "p.format")
+  ylab("Minimum LA volume (mL)") +
+  theme_grey(base_size = 15) +
+  #facet_grid(. ~ Gender) +
+  stat_compare_means(aes(group = Gender), method = "t.test", label = "p.signif")
+
+# Tibia corrected max volume
+ggplot(simpson_tib %>% filter(Group == "Aging"), 
+       aes(fill = Gender, x = factor(Age), y = Min_V)) +
+  geom_boxplot() +
+  xlab("Age (Months)") +
+  ylab("Minimum LA volume / tibia length (mL/mm)") +
+  theme_grey(base_size = 15) +
+  #facet_grid(. ~ Gender) +
+  stat_compare_means(aes(group = Gender), method = "t.test", label = "p.signif")
 
 # Paired minimum left atrium volume 9-16 months old
 ggplot(simpson_HE %>% filter(Group == "Aging")%>% 
@@ -82,26 +100,12 @@ ggplot(simpson_HE %>% filter(Group == "Aging")%>%
 
 ## EJECTION FRACTION ----
 
-# Ejection fraction (9 months old) - Simpson's method
-ggboxplot(simpson_HE %>% filter(Age == 9, Group == "Aging"), x = "Gender", y = "EF", fill = "Gender",
-          xlab = "Gender", ylab = "EF (%)") + 
-  theme(legend.position = "none")
-
-# Ejection fraction (9 to 16 months old) - Simpson's method
-ggboxplot(simpson_HE %>% filter(Group == "Aging"), 
-          x = "Age", y = "EF", fill = "Gender",
-          xlab = "Age (months)", ylab = "EF (%)",
-          facet.by = "Gender") +
-  stat_compare_means(comparisons = list(c("9", "16")), method = "t.test")
-
-# Paired EF in males
-ggpaired(simpson_HE %>% 
-           filter(Group == "Aging", Gender == "Male") %>%
-           group_by(ID) %>%
-           filter(n() == 2) %>%
-           ungroup(), 
-         x = "Age", y = "EF", fill = "lightblue",
-         id = "ID",
-         xlab = "Age (months)", ylab = "EF (%)") +
-  stat_compare_means(comparisons = list(c("9", "16")), method = "t.test")
-
+# Left atrium ejection fraction from 9 to 16 months old
+ggplot(simpson_HE %>% filter(Group == "Aging"), 
+       aes(x = factor(Age), y = EF)) +
+  geom_boxplot(aes(fill=Gender)) +
+  xlab("Age (Months)") +
+  ylab("LA ejection fraction (%)") +
+  theme_grey(base_size = 15) +
+  facet_grid(~ Gender) +
+  stat_compare_means(comparisons = list(c("9","16")), method = "t.test", label = "p.signif")
