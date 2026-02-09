@@ -4,11 +4,13 @@ library(tidyverse)
 library(ggpubr)
 library(ggplot2)
 
+# ----------------- not yet updated to SQL standard ------------
+# runs on old excel format
+
 # RUN DATA PREPARATION
-source("Data handling/data_prep.r")
+source("Data handling/data_prep_excel.r")
 # or load saved data
-load("Data handling/LA_data.RData")
-load("Data handling/master_long.RData")
+load("Data handling/LA_data_old.RData")
 
 ## Max LA diameter (MRI) over time ----
 # Maximum left atrium diameter from 9 to 16 months old

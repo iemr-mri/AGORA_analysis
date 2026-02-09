@@ -1,7 +1,10 @@
 # RUN DATA PREPARATION
-source("Data handling/data_prep.r")
+source("Data handling/data_prep_excel.r")
 # or load saved data
-load("Data handling/LA_data.RData")
+load("Data handling/LA_data_old.RData")
+
+# ----------------- not yet updated to SQL standard ------------
+# runs on old excel format
 
 LGE_extent <- read_excel("R:\\Projects\\AGORA\\LA measurements\\LA size measurements_Henrik.xlsx", sheet = "MI size")
 simpson_LGE <- inner_join(simpson_HE, LGE_extent, by = c("ID","Cohort"))
