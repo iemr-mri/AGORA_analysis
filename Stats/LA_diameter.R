@@ -13,12 +13,13 @@ load("Data handling/master_long.RData")
 ## Max LA diameter (MRI) over time ----
 # Maximum left atrium diameter from 9 to 16 months old
 ggplot(simpson_HE %>% filter(Group == "Aging"), 
-       aes(fill = Gender, x = factor(Age), y = Max_D)) +
-  geom_boxplot() +
+       aes(x = factor(Age), y = Max_D)) +
+  geom_boxplot(aes(fill=Gender)) +
   xlab("Age (Months)") +
   ylab("Maximum LA diameter (mm)") +
   theme_grey(base_size = 15) +
-  stat_compare_means(aes(group = Gender), method = "t.test", label = "p.signif")
+  facet_grid(~ Gender) +
+  stat_compare_means(comparisons = list(c("9","16")), method = "t.test", label = "p.signif")
 
 # Maximum left atrium diameter from 9 to 16 months old - faceted
 ggplot(simpson_HE %>% filter(Group == "Aging"), 
